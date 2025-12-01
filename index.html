@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Photo App</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
+  <script type="module" crossorigin src="/data_manager_photo/assets/index-Dyd6b7Rj.js"></script>
+  <link rel="stylesheet" crossorigin href="/data_manager_photo/assets/index-Cz1G_8kt.css">
+</head>
+
+<body>
+    <div class="app-container">
+        <!-- Camera Page -->
+        <div id="camera-page" class="page camera-layout">
+            <!-- Top bar removed as requested, controls moved to overlay -->
+
+            <div class="camera-preview-container">
+                <div class="camera-preview-wrapper">
+                    <video id="camera-feed" autoplay playsinline></video>
+                    <canvas id="capture-canvas" style="display: none;"></canvas>
+                    <div class="camera-overlay"></div>
+
+                    <!-- Group Controls Overlay -->
+                    <div class="group-controls-overlay">
+                        <div class="group-controls">
+                            <div class="current-group-info">
+                                <span id="current-group-name">Group 1</span>
+                                <button id="new-group-btn" class="icon-btn small" aria-label="New Group">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2">
+                                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                                    </svg>
+                                </button>
+                            </div>
+                            <input type="text" id="group-memo-input" placeholder="Add memo..." class="memo-input">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="camera-bottom-bar">
+                <div class="gallery-link-wrapper">
+                    <button id="to-gallery-btn" class="gallery-thumbnail" aria-label="Go to Gallery">
+                        <img id="last-photo-preview" src="" alt="" class="hidden">
+                        <span id="camera-photo-count" class="photo-count-badge">0</span>
+                    </button>
+                </div>
+
+                <button id="capture-btn" class="capture-btn" aria-label="Take Photo">
+                    <div class="inner-circle"></div>
+                </button>
+
+                <div class="bottom-bar-spacer"></div>
+            </div>
+        </div>
+
+        <!-- Gallery Page -->
+        <div id="gallery-page" class="page hidden">
+            <header class="gallery-header">
+                <button id="to-camera-btn" class="icon-btn small" aria-label="Back to Camera">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="15 18 9 12 15 6"></polyline>
+                    </svg>
+                </button>
+                <h2>Gallery</h2>
+                <div class="header-actions">
+                    <span id="photo-count">0 photos</span>
+                    <button id="settings-btn" class="icon-btn small" aria-label="Settings">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <circle cx="12" cy="12" r="3"></circle>
+                            <path
+                                d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z">
+                            </path>
+                        </svg>
+                    </button>
+                    <button id="select-mode-btn" class="text-btn">Select</button>
+                </div>
+            </header>
+
+            <div id="gallery-grid" class="gallery-grid">
+                <!-- Photos will be inserted here -->
+            </div>
+
+            <!-- Bulk Action Bar -->
+            <div id="bulk-action-bar" class="bulk-action-bar hidden">
+                <div class="bulk-info">
+                    <span id="selected-count">0 selected</span>
+                    <button id="select-all-btn" class="text-btn">Select All</button>
+                </div>
+                <div class="bulk-actions">
+                    <button id="bulk-download-btn" class="icon-btn primary">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                            <polyline points="7 10 12 15 17 10"></polyline>
+                            <line x1="12" y1="15" x2="12" y2="3"></line>
+                        </svg>
+                    </button>
+                    <button id="bulk-move-btn" class="icon-btn">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <polyline points="9 17 4 12 9 7"></polyline>
+                            <path d="M20 18v-2a4 4 0 0 0-4-4H4"></path>
+                        </svg>
+                    </button>
+                    <button id="bulk-delete-btn" class="icon-btn danger">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <polyline points="3 6 5 6 21 6"></polyline>
+                            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2">
+                            </path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Photo Modal  -->
+    <div id="photo-modal" class="modal hidden">
+        <button id="prev-btn" class="nav-btn prev" aria-label="Previous Photo">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="15 18 9 12 15 6"></polyline>
+            </svg>
+        </button>
+
+        <div class="modal-content">
+            <img id="modal-image" src="" alt="Selected photo">
+            <div class="modal-actions">
+                <button id="close-modal-btn" class="icon-btn">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+                <div class="action-group">
+                    <button id="download-btn" class="action-btn primary">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                            <polyline points="7 10 12 15 17 10"></polyline>
+                            <line x1="12" y1="15" x2="12" y2="3"></line>
+                        </svg>
+                        Save
+                    </button>
+                    <button id="move-btn" class="action-btn">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <polyline points="9 17 4 12 9 7"></polyline>
+                            <path d="M20 18v-2a4 4 0 0 0-4-4H4"></path>
+                        </svg>
+                        Move
+                    </button>
+                    <button id="delete-btn" class="action-btn danger">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <polyline points="3 6 5 6 21 6"></polyline>
+                            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2">
+                            </path>
+                        </svg>
+                        Delete
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <button id="next-btn" class="nav-btn next" aria-label="Next Photo">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
+        </button>
+    </div>
+
+    <!-- Settings Modal -->
+    <div id="settings-modal" class="modal hidden">
+        <div class="modal-content settings-content">
+            <div class="settings-header">
+                <h2>Settings</h2>
+                <button id="close-settings-btn" class="icon-btn small">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            <div class="settings-body">
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <span class="setting-label">Auto Filename</span>
+                        <span class="setting-desc">Use current time as filename</span>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="auto-filename-toggle" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="setting-item">
+                    <button id="reset-app-btn" class="action-btn danger full-width">
+                        Reset All Data
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Move Modal -->
+    <div id="move-modal" class="modal hidden">
+        <div class="modal-content settings-content">
+            <div class="settings-header">
+                <h2>Move to Group</h2>
+                <button id="close-move-btn" class="icon-btn small">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            <div class="settings-body">
+                <div id="group-list" class="group-list">
+                    <!-- Groups will be inserted here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>
